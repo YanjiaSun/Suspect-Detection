@@ -7,6 +7,10 @@ count = 0;
 % and displaying the results.
 obj = setupSystemObjects();
 
+writer = VideoWriter('..\AVI\test2_output.avi');
+writer.FrameRate = obj.reader.info().VideoFrameRate;
+open(writer);
+
 tracks = initializeTracks(); % Create an empty array of tracks.
 
 nextId = 1; % ID of the next track
@@ -26,6 +30,8 @@ while ~isDone(obj.reader)
 
     displayTrackingResults();
 end
+
+close(writer);
 
     function obj = setupSystemObjects()
         % Initialize Video I/O
@@ -253,6 +259,8 @@ end
                 % Draw the objects on the mask.
                 mask = insertObjectAnnotation(mask, 'rectangle', ...
                     bboxes, labels);
+                
+                writeVideo(writer, frame);
             end
         end
 

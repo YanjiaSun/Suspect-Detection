@@ -1,4 +1,9 @@
-function main()
+function SD_Algorithm(inFileName)
+
+[pathstr,name,ext] = fileparts(inFileName);
+
+outputPath = [pathstr '\' name '\'];
+mkdir(outputPath);
 
 % # of saved image
 count = 0;
@@ -7,7 +12,7 @@ count = 0;
 % and displaying the results.
 obj = setupSystemObjects();
 
-writer = VideoWriter('..\AVI\test2_output.avi');
+writer = VideoWriter([outputPath, 'output.avi']);
 writer.FrameRate = obj.reader.info().VideoFrameRate;
 open(writer);
 
@@ -39,7 +44,7 @@ close(writer);
         % objects in each frame, and playing the video.
 
         % Create a video file reader.
-        obj.reader = vision.VideoFileReader('..\AVI\test2.avi');
+        obj.reader = vision.VideoFileReader(inFileName);
 
         % Create two video players, one to display the video,
         % and one to display the foreground mask.
@@ -276,7 +281,7 @@ close(writer);
             dim = bboxes(i,:);
             if dim(2) >= 1 && dim(2)+dim(4)-1 >= 1 && dim(2)+dim(4)-1 < size(frame, 1) && dim(1) >= 1 && dim(1)+dim(3)-1 >= 1&& dim(1)+dim(3)-1 < size(frame, 2)
                 img = frame(dim(2):dim(2)+dim(4)-1, dim(1):dim(1)+dim(3)-1, :);
-                fileName = ['..\AVI\' num2str(ids(i)) '_' num2str(count) '.png'];
+                fileName = [outputPath num2str(ids(i)) '_' num2str(count) '.png'];
                 imwrite(img, fileName);
                 count=count+1;
             end
